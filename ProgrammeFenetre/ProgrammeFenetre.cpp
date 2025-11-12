@@ -47,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
-            TranslateMessage(&msg);
+            /*TranslateMessage(&msg);*/
             DispatchMessage(&msg);
         }
     }
@@ -77,7 +77,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_PROGRAMMEFENETRE);
-    wcex.lpszClassName  = szWindowClass;
+    wcex.lpszClassName  = L"ClassName";
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
@@ -97,18 +97,34 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(L"ClassName", L"azerty", WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-
    if (!hWnd)
    {
       return FALSE;
    }
 
+
+   HWND hwndButton1 = CreateWindowW(
+       L"BUTTON", L"BipBip", WS_VISIBLE | WS_CHILD, 0, 0, 50, 25, hWnd, nullptr, hInstance, nullptr);
+
+   HWND hwndButton2 = CreateWindowW(
+       L"BUTTON", L"BoupBoup", WS_VISIBLE | WS_CHILD, 60, 0, 75, 50, hWnd, (HMENU)10, hInstance, nullptr);
+
+
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
    return TRUE;
+}
+
+int CreateButton(HINSTANCE hInstance, HWND hWnd)
+{
+
+    HWND hwndButton3 = CreateWindowW(
+        L"BUTTON", L"BipBoup", WS_VISIBLE | WS_CHILD, 60, 0, 75, 50, hWnd, (HMENU)10, hInstance, nullptr);
+    return 0;
 }
 
 //
@@ -123,6 +139,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HINSTANCE hInstance;
     switch (message)
     {
     case WM_COMMAND:
@@ -136,6 +153,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
+                break;
+            case 10: 
+                CreateButton(hInstance, hWnd);
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
