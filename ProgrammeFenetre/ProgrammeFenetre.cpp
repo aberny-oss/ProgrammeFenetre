@@ -17,7 +17,8 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-HWND hWndChild;
+// Element de la page
+//HWND hWndChild;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -106,7 +107,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
-   HWND hwndButton1 = CreateWindowW(
+   /*HWND hwndButton1 = CreateWindowW(
        L"BUTTON", L"BipBip", WS_VISIBLE | WS_CHILD, 0, 0, 50, 25, hWnd, nullptr, hInstance, nullptr);
    if (!hwndButton1)
    {
@@ -125,7 +126,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    if (!hWndChild)
    {
        return FALSE;
-   }
+   }*/
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
