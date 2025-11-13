@@ -1,10 +1,14 @@
 // ProgrammeFenetre.cpp : Définit le point d'entrée de l'application.
 //
 
+#include <vector>
+
 #include "framework.h"
 #include "ProgrammeFenetre.h"
 
+
 #define MAX_LOADSTRING 100
+
 
 // Variables globales :
 HINSTANCE hInst;                                // instance actuelle
@@ -18,7 +22,16 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 // Element de la page
+HWND hWnd;
 //HWND hWndChild;
+
+struct PIX
+{
+    int x;
+    int y;
+    COLORREF c;
+};
+std::vector<PIX> pixels;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -44,7 +57,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PROGRAMMEFENETRE));
 
     MSG msg;
-
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -100,12 +112,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
-   HWND hWnd = CreateWindowW(L"ClassName", L"azerty", WS_OVERLAPPEDWINDOW,
+   hWnd = CreateWindowW(L"ClassName", L"azerty", WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
    if (!hWnd)
    {
       return FALSE;
    }
+   SetTimer(hWnd, 100, 1, (TIMERPROC)NULL);
 
    /*HWND hwndButton1 = CreateWindowW(
        L"BUTTON", L"BipBip", WS_VISIBLE | WS_CHILD, 0, 0, 50, 25, hWnd, nullptr, hInstance, nullptr);
@@ -178,8 +191,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             {
                 for (int j = 0; j < rc.bottom-rc.top; j++)
                 {
-                    SetPixelV(hdc, i, j, RGB(0 + i, 0 + j, 0 + (i + j)));
+                    //SetPixelV(hdc, i, j, RGB(0 + i, 0 + j, 0 + (i + j)));
                 }
+            }
+            for (int i = 0; i < pixels.size(); i++)
+            {
+                PIX p = pixels[i];
+                SetPixelV(hdc, p.x, p.y, p.c);
+
             }
             EndPaint(hWnd, &ps);
         }
@@ -187,6 +206,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+    //case WM_TIMER:
+    //{
+    //    PIX p;
+    //    p.x = rand() % 100;
+    //    p.y = rand() % 100;
+    //    p.c = RGB(rand() % 255, rand() % 255, rand() % 255);
+    //    pixels.push_back(p);
+    //    RedrawWindow(hWnd, nullptr, nullptr, RDW_ERASE| RDW_INVALIDATE);
+    //        //SetPixelV(hdc, i, j, RGB(0 + i, 0 + j, 0 + (i + j)))
+
+    //       break;
+    //}
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
