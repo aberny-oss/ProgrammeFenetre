@@ -17,6 +17,8 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+HWND hWndChild;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -104,7 +106,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
-
    HWND hwndButton1 = CreateWindowW(
        L"BUTTON", L"BipBip", WS_VISIBLE | WS_CHILD, 0, 0, 50, 25, hWnd, nullptr, hInstance, nullptr);
    if (!hwndButton1)
@@ -119,16 +120,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        return FALSE;
    }
 
-   HWND hWndStatic = CreateWindowW(
-       L"STATIC", L"Bon toutou!", WS_CHILD, 10, 80, 200, 25, hWnd, nullptr, hInstance, nullptr);
-   if (!hWndStatic)
+   hWndChild = CreateWindowW(L"ClassName", L"Bon TouTou", WS_CHILDWINDOW | WS_BORDER, 150, 50, 200, 200,
+       hWnd, nullptr, hInstance, nullptr);
+   if (!hWndChild)
    {
        return FALSE;
    }
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
-
    return TRUE;
 }
 
@@ -159,6 +159,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DestroyWindow(hWnd);
                 break;
             case 10:
+                ShowWindow(hWndChild, SW_SHOW);
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
