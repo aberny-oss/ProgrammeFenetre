@@ -144,38 +144,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
        return FALSE;
    }*/
 
-   /////////////////////////////////////
-   FILE* chargeImg = nullptr;
-   BYTE* list = new BYTE[3126];
-   errno_t chargeImgeS = fopen_s(&chargeImg,
-       "C:\\Users\\aberny\\Documents\\Img32x32BMP.bmp",
-       "rb");
-   if (chargeImgeS)
-   {
-       return 0;
-   }
-   size_t size = fread(list, 1, 3126, chargeImg);
-   fclose(chargeImg);
-
-   ////////////////////////////////////////
-
-   BITMAPFILEHEADER bitmapHeader = {};
-   memcpy(&bitmapHeader, list, sizeof(BITMAPFILEHEADER));
-
-   BITMAPINFOHEADER info = {};
-   memcpy(&info, list + sizeof(BITMAPFILEHEADER), sizeof(BITMAPINFOHEADER));
-
-   BYTE* rgb = list + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
-   for (int i = 0; i < info.biWidth * info.biHeight * 3; i++)
-   {
-       int r = rgb[i];
-       int g = rgb[i + 1];
-       int b = rgb[i + 2];
-
-       
-   }
-   delete[] list;
-
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -223,8 +191,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
 
-            const BitMap pBitMap;
-            CreateDIBitmap(hdc, &pBitMap)
+            /////////////////////////////////////
+            FILE* chargeImg = nullptr;
+            BYTE* list = new BYTE[3126];
+            errno_t chargeImgeS = fopen_s(&chargeImg,
+                "C:\\Users\\aberny\\Documents\\Img32x32BMP.bmp",
+                "rb");
+            if (chargeImgeS)
+            {
+                return 0;
+            }
+            size_t size = fread(list, 1, 3126, chargeImg);
+            fclose(chargeImg);
+
+            ////////////////////////////////////////
+
+            BITMAPFILEHEADER bitmapHeader = {};
+            memcpy(&bitmapHeader, list, sizeof(BITMAPFILEHEADER));
+
+            BITMAPINFOHEADER info = {};
+            memcpy(&info, list + sizeof(BITMAPFILEHEADER), sizeof(BITMAPINFOHEADER));
+
+            BYTE* rgb = list + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+            for (int i = 0; i < info.biWidth * info.biHeight * 3; i++)
+            {
+                int r = rgb[i];
+                int g = rgb[i + 1];
+                int b = rgb[i + 2];
+
+
+            }
+            delete[] list;
+
+            BITMAPINFO bitmapinfo;
+            bitmapinfo.bmiHeader = info;
+
+            HBITMAP h =CreateDIBitmap(hdc, &info, CBM_INIT, rgb, &bitmapinfo, DIB_RGB_COLORS);
             // TODO: Ajoutez ici le code de dessin qui utilise hdc...
             for (int i = 0; i < rc.right-rc.left; i++)
             {
