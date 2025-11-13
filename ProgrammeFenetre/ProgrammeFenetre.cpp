@@ -169,14 +169,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_PAINT:
         {
+            RECT rc;
+            GetClientRect(hWnd, &rc);
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Ajoutez ici le code de dessin qui utilise hdc...
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < rc.right-rc.left; i++)
             {
-                for (int j = 0; j < 500; j++)
+                for (int j = 0; j < rc.bottom-rc.top; j++)
                 {
-                    SetPixel(hdc, i, j, RGB(0 + i, 0 + j, 0 + (i + j)));
+                    SetPixelV(hdc, i, j, RGB(0 + i, 0 + j, 0 + (i + j)));
                 }
             }
             EndPaint(hWnd, &ps);
